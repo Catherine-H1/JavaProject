@@ -10,9 +10,9 @@ public class Main extends JPanel {
 
     public Main() {
         layers = new ArrayList<>();
-        layers.add(new Layer(new Color(255, 0, 0, 150), 0.6f, BlendMode.ADD, new Rectangle(50, 50, 200, 200)));
-        layers.add(new Layer(new Color(0, 255, 255, 150), 0.6f, BlendMode.ADD, new Rectangle(150, 150, 200, 200)));
-        layers.add(new Layer(new Color(255, 255, 0, 120), 0.6f, BlendMode.ADD, new Rectangle(100, 100, 150, 150)));
+//        layers.add(new Layer(new Color(255, 0, 0, 150), 0.6f, BlendMode.SUBTRACT, new Rectangle(100, 80, 50, 50)));
+//        layers.add(new Layer(new Color(0, 255, 255, 150), 0.6f, BlendMode.SUBTRACT, new Rectangle(150, 150, 50, 400)));
+        layers.add(new Layer(new Color(255, 255, 0, 128), 0.6f, BlendMode.ADD, new Rectangle(100, 100, 120, 400)));
     }
 
     @Override
