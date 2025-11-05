@@ -11,7 +11,7 @@ public class Renderer {
         this.g2d = g2d;
     }
 
-    // 🧩 Helper: Blend two images pixel-by-pixel
+    // Blend two images pixel-by-pixel with bufferedImage
     private BufferedImage blend(BufferedImage base, BufferedImage top, BlendMode mode) {
         int width = base.getWidth();
         int height = base.getHeight();
@@ -39,7 +39,7 @@ public class Renderer {
 
                 float r, g, b;
 
-                // 🎨 Apply blending logic
+                // Apply blending logic, each of the add mul subtract
                 switch (mode) {
                     case ADD:
                         r = Math.min(1.0f, r1 + r2);
@@ -57,13 +57,13 @@ public class Renderer {
                         b = Math.max(0.0f, b1 - b2);
                         break;
                     default:
-                        // NORMAL mode = just take the top pixel
+                        // Without specification = just take the top pixel, as with painter's algorithm
                         r = r2;
                         g = g2;
                         b = b2;
                 }
 
-                // Combine alpha (optional simplification)
+                // Combine alpha for simplification
                 float a = Math.max(baseC.getAlpha(), topC.getAlpha()) / 255f;
 
                 int outR = (int) (r * 255);
@@ -79,18 +79,18 @@ public class Renderer {
         return result;
     }
 
-    // 🧠 Main draw method
+    // Main draw method
     public void draw(List<Layer> layers) {
         int width = 800;
         int height = 600;
 
-        // Step 1: create blank base image
+        // Blank Base Image. It's all white, so there could be consequeuces there
         BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gResult = result.createGraphics();
         gResult.setColor(Color.WHITE);
         gResult.fillRect(0, 0, width, height);
 
-        // Step 2: draw and blend each layer
+        // Draw and blend each layer
         for (Layer layer : layers) {
             BufferedImage layerImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D gLayer = layerImg.createGraphics();
@@ -103,7 +103,7 @@ public class Renderer {
             result = blend(result, layerImg, layer.getBlendMode());
         }
 
-        // Step 3: draw final result to the panel's Graphics2D
+        // Draw final result to the panel
         gResult.dispose();
         g2d.drawImage(result, 0, 0, null);
     }

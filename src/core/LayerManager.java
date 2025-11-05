@@ -20,7 +20,7 @@ public class LayerManager {
         if (index >= 0 && index < layers.size()) selectedIndex = index;
     }
 
-    // ✅ Select the topmost layer that contains the click point
+    // Select the topmost layer that contains the click point
     public void selectLayerByClick(Point p) {
         for (int i = layers.size() - 1; i >= 0; i--) {
             if (layers.get(i).getShape().contains(p)) {
@@ -31,7 +31,7 @@ public class LayerManager {
         selectedIndex = -1; // clicked empty space
     }
 
-    // ✅ Move currently selected layer by (dx, dy)
+    // Move currently selected layer by dx and dy. Calls the layer's own method
     public void moveSelectedLayer(int dx, int dy) {
         Layer l = getSelectedLayer();
         if (l != null) {
