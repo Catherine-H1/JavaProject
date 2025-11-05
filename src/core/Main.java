@@ -16,7 +16,7 @@ public class Main extends JPanel {
         manager.addLayer(new Layer(new Color(0, 255, 255, 180), 0.8f, BlendMode.MULTIPLY, new Rectangle(150, 150, 250, 250))); // Cyan
         manager.addLayer(new Layer(new Color(255, 0, 0, 180), 0.8f, BlendMode.MULTIPLY, new Rectangle(100, 100, 250, 250))); // Red
 
-        // 🖱 Add mouse listeners here (inside constructor, after adding layers)
+        // Add mouse listeners here (inside constructor, after adding layers)
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
