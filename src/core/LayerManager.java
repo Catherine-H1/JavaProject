@@ -6,10 +6,44 @@ import java.util.List;
 public class LayerManager {
     private List<Layer> layers = new ArrayList<>();
     private int selectedIndex = -1;
+    private java.util.Stack<java.util.List<Layer>> history = new java.util.Stack<>();
 
-    public void addLayer(Layer layer) { layers.add(layer); }
+    private void saveState() {
+        java.util.List<Layer> snapshot = new java.util.ArrayList<>();
+        for (Layer l : layers) {
+            snapshot.add(new Layer(
+                    l.getColor(),
+                    l.getOpacity(),
+                    l.getBlendMode(),
+                    new java.awt.Rectangle(l.getShape())
+            ));
+        }
+        history.push(snapshot);
+    }
+    public void addLayer(Layer layer) {
+        saveState();
+        layers.add(layer);
+    }
+
     public void removeLayer(int index) {
-        if (index >= 0 && index < layers.size()) layers.remove(index);
+        if (index >= 0 && index < layers.size()) {
+            saveState();
+            layers.remove(index);
+        }
+    }
+
+    public void deleteSelectedLayer() {
+        if (selectedIndex >= 0 && selectedIndex < layers.size()) {
+            saveState();
+            layers.remove(selectedIndex);
+            selectedIndex = -1;
+        }
+    }
+    public void undo() {
+        if (!history.isEmpty()) {
+            layers = history.pop();
+            selectedIndex = -1;
+        }
     }
     public List<Layer> getLayers() { return layers; }
     public Layer getSelectedLayer() {
@@ -37,5 +71,21 @@ public class LayerManager {
         if (l != null) {
             l.move(dx, dy);
         }
+    }
+    public Layer.HandlePosition getHandleAt(Point p) {
+        Layer selected = getSelectedLayer();
+        if (selected != null) {
+            return selected.getHandleAt(p);
+        }
+        return Layer.HandlePosition.NONE;
+    }
+
+    public void setLayers(List<Layer> newLayers) {
+        this.layers = newLayers;
+        selectedIndex = -1;
+    }
+    public void clear() {
+        layers.clear();
+        selectedIndex = -1;
     }
 }

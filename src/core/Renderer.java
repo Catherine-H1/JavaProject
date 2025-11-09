@@ -84,7 +84,7 @@ public class Renderer {
         int width = 800;
         int height = 600;
 
-        // Blank Base Image. It's all white, so there could be consequeuces there
+        // Blank Base Image. It's all white, so there could be consequences there
         BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gResult = result.createGraphics();
         gResult.setColor(Color.WHITE);
