@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.List;
 
 
 public class ToolbarPanel extends JPanel {
@@ -114,6 +115,25 @@ public class ToolbarPanel extends JPanel {
             }
         });
         add(loadButton);
+        JButton testButton = new JButton("Test your Drawing Skills");
+        testButton.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file = chooser.getSelectedFile();
+                try {
+                    // load the challenge layers
+                    List<Layer> challengeLayers = FileHandler.loadChallenge(file);
+
+                    // show challenge window
+                    new ChallengeWindow(challengeLayers, manager);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error loading challenge: " + ex.getMessage());
+                }
+            }
+        });
+        add(testButton);
+
 
 
         // Stretch Fill to make the right side not an empty void

@@ -59,4 +59,28 @@ public class FileHandler {
 
         manager.setLayers(newLayers);
     }
+    public static List<Layer> loadChallenge(File file) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) sb.append(line);
+        }
+
+        JSONObject root = new JSONObject(sb.toString());
+        JSONArray arr = root.getJSONArray("layers");
+        List<Layer> layers = new ArrayList<>();
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject obj = arr.getJSONObject(i);
+            Color c = new Color(obj.getInt("r"), obj.getInt("g"), obj.getInt("b"));
+            float opacity = (float) obj.getDouble("opacity");
+            BlendMode mode = BlendMode.valueOf(obj.getString("blendMode"));
+            Rectangle rect = new Rectangle(
+                    obj.getInt("x"), obj.getInt("y"),
+                    obj.getInt("width"), obj.getInt("height")
+            );
+            layers.add(new Layer(c, opacity, mode, rect));
+        }
+        return layers;
+    }
+
 }
