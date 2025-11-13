@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"core","l":"ChallengeWindow"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"core","l":"BlendMode"},{"p":"core","l":"ChallengeScorer"},{"p":"core","l":"ChallengeWindow"},{"p":"core","l":"FileHandler"},{"p":"core","l":"Layer.HandlePosition"},{"p":"core","l":"Layer"},{"p":"core","l":"LayerManager"},{"p":"core","l":"Main"},{"p":"core","l":"Renderer"},{"p":"core","l":"ToolbarPanel"}];updateSearchResults();

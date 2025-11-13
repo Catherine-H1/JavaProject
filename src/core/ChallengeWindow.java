@@ -1,19 +1,40 @@
 package core;
-/**
- * External panel that shows the goal/target drawing. Has hint giver.
- * Checks if your drawing is close in terms of size, distance, color, and mode.
- */
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
+/**
+ * The ChallengeWindow displays a target set of layers that the user must try
+ * to recreate. It shows a live preview of the challenge image, provides a
+ * hint system, and allows the user to check how closely their drawing
+ * matches the challenge. Also cheater mode once all hints are exhausted.
+ *
+ * Features:
+ *  - Renders the challenge layers using the same Renderer as the main canvas that is view only.
+ *  - Offers progressively revealing hints, followed by "cheater hints" that
+ *    reveal exact layer details.
+ *  - Contains a scoring button that compares the challenge against the user's
+ *    current drawing using ChallengeScorer.
+ *
+ * This window is opened when the user clicks "Test your
+ * Drawing Skills" from the toolbar.
+ */
 public class ChallengeWindow extends JFrame {
 
     private JTextArea hintArea;
     private int hintIndex = 0;
     private List<Layer> challengeLayers;
 
+    /**
+     * Creates a new ChallengeWindow displaying the target layers for the user
+     * to analyze and recreate. The window contains:
+     *  - A preview panel showing the challenge image.
+     *  - A scrollable text area for hints.
+     *  - Buttons to request more hints or check the user's accuracy.
+     *
+     * @param challengeLayers the list of layers that define the challenge
+     * @param playerManager   the player's LayerManager, used for scoring
+     */
     public ChallengeWindow(List<Layer> challengeLayers, LayerManager playerManager) {
         this.challengeLayers = challengeLayers;
 
@@ -63,8 +84,6 @@ public class ChallengeWindow extends JFrame {
 
         setVisible(true);
     }
-
-    // Logic behind the hints. Below 7, gives small hints. Above 7, starts giving cheater hints
     private void showNextHint() {
         hintIndex++;
         int total = challengeLayers.size();
@@ -107,7 +126,6 @@ public class ChallengeWindow extends JFrame {
         hintArea.append("--------------------------\n");
         hintArea.setCaretPosition(hintArea.getDocument().getLength()); // auto-scroll
     }
-
     private String colorToString(Color c) {
         return "RGB(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")";
     }

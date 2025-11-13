@@ -74,7 +74,7 @@ public class Main extends JPanel {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
 
-                // Backspace → delete layer
+                // Backspace to delete layer
                 if (key == KeyEvent.VK_BACK_SPACE) {
                     Layer selected = manager.getSelectedLayer();
                     if (selected != null) {
@@ -84,7 +84,7 @@ public class Main extends JPanel {
                     }
                 }
 
-                // Ctrl+Z → undo actions
+                // Ctrl+Z to undo actions
                 if (e.isControlDown() && key == KeyEvent.VK_Z) {
                     if (!undoStack.isEmpty()) {
                         Layer restored = undoStack.pop();
@@ -109,7 +109,6 @@ public class Main extends JPanel {
         });
 
     }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -122,11 +121,9 @@ public class Main extends JPanel {
             selected.drawHandles((Graphics2D) g);
         }
     }
-
     public LayerManager getManager() {
         return manager;
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Spectral Layers");
@@ -135,7 +132,7 @@ public class Main extends JPanel {
 
             // Create canvas and toolbar
             Main canvas = new Main();
-            canvas.setPreferredSize(new Dimension(780, 600)); // <-- key line
+            canvas.setPreferredSize(new Dimension(780, 600)); // sets the size of the canvas, essential
             ToolbarPanel toolbar = new ToolbarPanel(canvas.getManager(), canvas::repaint);
 
             // Wrap them in a parent panel using BorderLayout

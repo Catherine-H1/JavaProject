@@ -1,7 +1,17 @@
 package core;
 
 import java.awt.*;
-
+/**
+ * A Layer is one rectangular shape in the drawing program. All drawings are composed of layers
+ * Each layer has:
+ * - a color
+ * - an opacity value
+ * - a blend mode (how it mixes with lower layers)
+ * - dimensions for width and height
+ *
+ * Layers can be moved, resized using corner handles, and drawn with
+ * visual resize handles for user interaction.
+ */
 public class Layer {
     private Color color;
     private float opacity;
@@ -10,11 +20,23 @@ public class Layer {
 
     // Handle size in pixels
     private static final int HANDLE_SIZE = 7;
-
+    /**
+     * Represents which resize handle a user is interacting with.
+     * NONE means the click was not on any handle.
+     * The other values correspond to the four corners of the rectangle.
+     */
     public enum HandlePosition {
         NONE, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
     }
-
+    /**
+     * Creates a new layer with the given color, opacity, blend mode,
+     * and rectangular position/size.
+     *
+     * @param color     the layer's fill color
+     * @param opacity   the transparency level (0.0 = transparent, 1.0 = opaque)
+     * @param blendMode how this layer blends with lower layers
+     * @param shape     the rectangle defining the layer's position and size
+     */
     public Layer(Color color, float opacity, BlendMode blendMode, Rectangle shape) {
         this.color = color;
         this.opacity = opacity;
@@ -22,12 +44,26 @@ public class Layer {
         this.shape = shape;
     }
 
-    // Move entire layer
+    /**
+     * Moves the entire layer by the specified horizontal and vertical offset.
+     *
+     * @param dx how far to move the layer horizontally
+     * @param dy how far to move the layer vertically
+     */
     public void move(int dx, int dy) {
         shape.translate(dx, dy);
     }
 
-    // Resize based on which handle is being dragged
+    /**
+     * Resizes the layer based on which corner handle is being dragged.
+     * The rectangle grows or shrinks according to the drag direction.
+     *
+     * Width and height are prevented from becoming too small or inverted.
+     *
+     * @param handle the handle being dragged
+     * @param dx     how far the mouse moved horizontally
+     * @param dy     how far the mouse moved vertically
+     */
     public void resize(HandlePosition handle, int dx, int dy) {
         switch (handle) {
             case TOP_LEFT -> {
@@ -57,7 +93,12 @@ public class Layer {
         if (shape.height < 10) shape.height = 10;
     }
 
-    // Determine if a point is inside one of the resize handles
+    /**
+     * Determines whether the given point lies on any of the resize handles.
+     *
+     * @param p the point to check
+     * @return which handle the point touches, or NONE if it touches none
+     */
     public HandlePosition getHandleAt(Point p) {
         Rectangle tl = new Rectangle(shape.x - HANDLE_SIZE / 2, shape.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
         Rectangle tr = new Rectangle(shape.x + shape.width - HANDLE_SIZE / 2, shape.y - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
@@ -71,13 +112,29 @@ public class Layer {
         return HandlePosition.NONE;
     }
 
-    // Getters
+    /**
+     * @return the fill color of the layer
+     */
     public Color getColor() { return color; }
+    /**
+     * @return the opacity of the layer (0.0 to 1.0)
+     */
     public float getOpacity() { return opacity; }
+    /**
+     * @return the blend mode used when compositing this layer
+     */
     public BlendMode getBlendMode() { return blendMode; }
+    /**
+     * @return the rectangle that defines the layer's position and size
+     */
     public Rectangle getShape() { return shape; }
 
-    // Drawing handles
+    /**
+     * Draws small black squares at the four corners of the layer.
+     * These handles allow the user to see where they can click to resize.
+     *
+     * @param g2d the graphics context to draw into
+     */
     public void drawHandles(Graphics2D g2d) {
         g2d.setColor(Color.BLACK);
         int s = HANDLE_SIZE;

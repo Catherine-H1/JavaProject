@@ -8,14 +8,40 @@ import java.awt.event.*;
 import java.io.File;
 import java.util.List;
 
-
+/**
+ * The ToolbarPanel provides all UI controls.
+ *
+ * Right side of the editor and lets the user:
+ * - Choose a color for a new layer using JColorChooser
+ * - Set the width and height of a layer, by typing
+ * - Choose a blend mode (Add, Multiply, Subtract)
+ * - Add a new layer to the canvas
+ * - Save the current artwork to a file
+ * - Load artwork from a file
+ * - Load a challenge file for the "Test Your Drawing Skills" mode
+ *
+ * It also communicates with the provided LayerManager to update or add layers,
+ * and uses a Runnable repaint callback provided by Main to refresh the canvas.
+ */
 public class ToolbarPanel extends JPanel {
     private final LayerManager manager;
     private final JPanel previewPanel;
     private final JComboBox<BlendMode> modeSelector;
     private final JSpinner widthSpinner;
     private final JSpinner heightSpinner;
-
+    /**
+     * Creates the toolbar panel with all editing controls.
+     *
+     * @param manager the LayerManager used to create and modify layers
+     * @param repaintCallback a function that forces the canvas to repaint
+     *                        after a change (usually Main::repaint)
+     * The constructor builds the interface on the right side, which includes:
+     * - A color preview box and color chooser dialog with JColorChooser
+     * - Width and height text boxes
+     * - A blend mode selector
+     * - Buttons for adding layers, saving files, loading files,
+     *   and starting the drawing challenge mode
+     */
     public ToolbarPanel(LayerManager manager, Runnable repaintCallback) {
         this.manager = manager;
 
@@ -133,9 +159,6 @@ public class ToolbarPanel extends JPanel {
             }
         });
         add(testButton);
-
-
-
         // Stretch Fill to make the right side not an empty void
         add(Box.createVerticalGlue());
     }
