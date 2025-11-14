@@ -5,14 +5,24 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Stack;
 
+/**
+ * The Main class represents the primary drawing canvas of the Spectral Layers application.
+ * It handles user interaction with layers, including rendering all layers and resizing layers/
+ * Main also works interacts with ToolbarPanel and LayerManager to allow users to interact with the app.
+ */
 public class Main extends JPanel {
     private LayerManager manager;
     private Point lastMouse;
     private Layer.HandlePosition activeHandle = Layer.HandlePosition.NONE;
-
+    private Layer copiedLayer = null;
     // Simple undo stack (stores deleted layers)
     private final Stack<Layer> undoStack = new Stack<>();
 
+    /**
+     * Main() constructs the main drawing canvas, initializes mouse and keyboard listeners,
+     * and configures interaction logic for layer actions like selecting, dragging, resizing, deleting,
+     * and undoing.
+     */
     public Main() {
         manager = new LayerManager();
 
@@ -93,6 +103,34 @@ public class Main extends JPanel {
                         repaint();
                     }
                 }
+
+
+                // Add this to your existing key listener:
+                if (e.isControlDown() && key == KeyEvent.VK_C) {
+                    Layer selected = manager.getSelectedLayer();
+                    if (selected != null) {
+                        copiedLayer = selected; // Just store reference
+                    }
+                }
+
+                if (e.isControlDown() && key == KeyEvent.VK_V) {
+                    if (copiedLayer != null) {
+                        // Create a copy with offset
+                        Layer pastedLayer = new Layer(
+                                copiedLayer.getColor(),
+                                copiedLayer.getOpacity(),
+                                copiedLayer.getBlendMode(),
+                                new Rectangle(
+                                        copiedLayer.getShape().x + 20,
+                                        copiedLayer.getShape().y + 20,
+                                        copiedLayer.getShape().width,
+                                        copiedLayer.getShape().height
+                                )
+                        );
+                        manager.addLayer(pastedLayer);
+                        repaint();
+                    }
+                }
             }
         });
         setFocusable(true);
@@ -109,6 +147,14 @@ public class Main extends JPanel {
         });
 
     }
+
+    /**
+     * The paintComponent(Graphics g) function renders all layers using the Renderer
+     * and draws resize handles on the currently selected layer. This method is automatically run
+     * when the canvas is edited.
+     *
+     * @param g the Graphics context used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -121,14 +167,30 @@ public class Main extends JPanel {
             selected.drawHandles((Graphics2D) g);
         }
     }
+
+    /**
+     * getManager() returns the LayerManager used by this canvas
+     *
+     * @return the LayerManager instance
+     */
     public LayerManager getManager() {
         return manager;
     }
+
+    /**
+     * Launches the Spectral Layers app. This initializes the main window,
+     * displays the welcome page, and sets up the canvas and toolbar.
+     *
+     * @param args unused command-line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Spectral Layers");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(1000, 600);
+
+            WelcomePage welcome = new WelcomePage(frame); // null parent since no main window yet
+            welcome.setVisible(true);
 
             // Create canvas and toolbar
             Main canvas = new Main();
