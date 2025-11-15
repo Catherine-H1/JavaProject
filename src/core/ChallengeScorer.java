@@ -63,11 +63,11 @@ public class ChallengeScorer {
     // Normal Falling off Function for Scoring, rather than pure 100 or 0
     private static double colorSimilarity(Color c1, Color c2) {
         double dist = colorDistance(c1, c2);  // 0 - 441
-        return Math.max(0, 1 - (dist / 150.0));
+        return Math.max(0, 1 - (dist / 200.0));
     }
     private static double positionSimilarity(Rectangle r1, Rectangle r2) {
         double dist = posDistance(r1, r2);
-        return Math.max(0, 1 - (dist / 200.0));
+        return Math.max(0, 1 - (dist / 80.0));
     }
     private static double colorDistance(Color c1, Color c2) {
         int dr = c1.getRed() - c2.getRed();
@@ -76,8 +76,21 @@ public class ChallengeScorer {
         return Math.sqrt(dr * dr + dg * dg + db * db);
     }
     private static double posDistance(Rectangle r1, Rectangle r2) {
-        int dx = (r1.x + r1.width/2) - (r2.x + r2.width/2);
-        int dy = (r1.y + r1.height/2) - (r2.y + r2.height/2);
-        return Math.sqrt(dx * dx + dy * dy);
+        // Top-left corner distance
+        int dx1 = r1.x - r2.x;
+        int dy1 = r1.y - r2.y;
+        double d1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+
+        // Bottom-right corner distance
+        int r1brX = r1.x + r1.width;
+        int r1brY = r1.y + r1.height;
+        int r2brX = r2.x + r2.width;
+        int r2brY = r2.y + r2.height;
+        int dx2 = r1brX - r2brX;
+        int dy2 = r1brY - r2brY;
+        double d2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+
+        // Average the two distances
+        return (d1 + d2) / 2.0;
     }
 }

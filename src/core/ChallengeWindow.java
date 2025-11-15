@@ -39,7 +39,7 @@ public class ChallengeWindow extends JFrame {
         this.challengeLayers = challengeLayers;
 
         setTitle("Challenge Viewer");
-        setSize(500, 400);
+        setSize(800, 600);
         setLayout(new BorderLayout());
 
         // Preview Panel, try to match this
